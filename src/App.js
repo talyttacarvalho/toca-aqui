@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import Card from "./Card.js";
+import ArtistCard from "./ArtistCard.js";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: []
+      artists: []
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -27,6 +28,7 @@ class App extends Component {
       .then(res => res.json())
       .then(data => console.log(data));
   }
+
   handleClick() {
     const options = {
       method: "get",
@@ -35,20 +37,18 @@ class App extends Component {
 
     fetch("https://peaceful-badlands-98440.herokuapp.com/artists", options)
       .then(res => res.json())
-      .then(data => this.setState({ data }));    
+      .then(data => this.setState({ artists: data }));    
   }
+
   render() {
     return (
       <div>
+        {this.state.artists.map((artist) => 
+          <ArtistCard name={artist.name} genre={artist.genre} />
+        )}
+        
         <Card>
-          <h1>Oi</h1>
-          <h2>Tchau</h2>
-        </Card>
-        <Card> 
-          banana 
-        </Card>
-        <Card> 
-          peixinho
+          graveler
           <button onClick={this.handleClick}>Pegar os artistas</button>
         </Card>
       </div>
