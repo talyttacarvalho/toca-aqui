@@ -15,6 +15,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const BASE_URL = "https://peaceful-badlands-98440.herokuapp.com"
     const options = {
       method: "post",
       headers: {
@@ -24,31 +25,30 @@ class App extends Component {
       body: JSON.stringify({ email: "rafael@laboratoria.la", password: "banana" })
     };
 
-    fetch("https://peaceful-badlands-98440.herokuapp.com/login", options)
-      .then(res => res.json())
-      .then(data => console.log(data));
+    fetch(`${BASE_URL}/login`, options)
+      .then(res => {
+        const options = {
+          method: "get",
+          credentials: 'include'
+        };
+
+        fetch(`${BASE_URL}/artists`, options)
+          .then(res => res.json())
+          .then(data => this.setState({ artists: data }));
+        });
   }
 
   handleClick() {
-    const options = {
-      method: "get",
-      credentials: 'include'
-    };
-
-    fetch("https://peaceful-badlands-98440.herokuapp.com/artists", options)
-      .then(res => res.json())
-      .then(data => this.setState({ artists: data }));    
   }
 
   render() {
     return (
       <div>
         {this.state.artists.map((artist) => 
-          <ArtistCard name={artist.name} genre={artist.genre} />
+          <ArtistCard name={artist.name} genre={artist.genre} id={artist.id} />
         )}
         
         <Card>
-          graveler
           <button onClick={this.handleClick}>Pegar os artistas</button>
         </Card>
       </div>
